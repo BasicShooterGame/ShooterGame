@@ -6,19 +6,21 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour
 {
     NavMeshAgent navMeshAgent;
-    [SerializeField] private Transform target;
+    Transform target;
 
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        target = GameObject.FindGameObjectWithTag("Player").transform;
         StartCoroutine(updatePath());
     }
 
     IEnumerator updatePath() {
         float refreshRate = 0.25f;
-        while (true)
+        while (target != null)
         {
-            navMeshAgent.SetDestination(target.position);
+            Vector3 targetPosition = new Vector3(target.position.x, 0, target.position.z);
+            navMeshAgent.SetDestination(targetPosition);
             yield return new WaitForSeconds(refreshRate);
         }
     }
